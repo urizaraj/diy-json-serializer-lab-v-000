@@ -12,5 +12,24 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
 //= require_tree .
+
+
+
+$(() => {
+  const next = $('#next')
+  const pid = $('#pid')
+  const name = $('#name')
+  const description = $('#description')
+
+  next.on('click', function() {
+    let id = pid.text()
+    fetch(`/products/${id}/data`)
+      .then(r => r.json())
+      .then(json => {
+        name.text(json['name'])
+        description.text(json['description'])
+        pid.text(json['id'])
+      })
+  })
+})

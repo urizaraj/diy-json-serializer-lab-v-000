@@ -3,9 +3,13 @@ class ProductsController < ApplicationController
     @products = Product.all
   end
 
+  def show
+    @product = Product.find(params[:id])
+  end
+
   def inventory
     product = Product.find(params[:id])
-    render plain: product.inventory > 0 ? true : false
+    render plain: product.inventory > 0
   end
 
   def description
@@ -20,6 +24,12 @@ class ProductsController < ApplicationController
   def create
     Product.create(product_params)
     redirect_to products_path
+  end
+
+  def data
+    product = Product.where("id > ?", params[:id]).limit(1).first
+    product = Product.first unless product
+    render json: ProductSerializer.serialize(product)
   end
 
   private
